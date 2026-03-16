@@ -217,14 +217,6 @@ def visible_metrics(races, p):
     return vis_exact, vis_top5, vis_pair
 
 
-def better_visible_metrics(a, b):
-    # Lexicographic priority:
-    # 1 exact matches
-    # 2 top-5 score
-    # 3 pairwise score
-    return a > b
-
-
 def random_params(rng):
     k_soft = rng.randint(8, 13)
     k_medium = rng.randint(17, 22)
@@ -325,8 +317,7 @@ def tweak_params(p, scale, rng):
         delta = abs(v) * scale + 1e-4
         out[k] = v + rng.uniform(-delta, delta)
 
-    out = enforce_order_constraints(out)
-    return out
+    return enforce_order_constraints(out)
 
 
 def main():
@@ -383,7 +374,7 @@ def main():
                 cand = tweak_params(best, scale, rng)
                 cand_vis = visible_metrics(visible, cand)
 
-                if better_visible_metrics(cand_vis, best_vis):
+                if cand_vis > best_vis:
                     best = cand
                     best_vis = cand_vis
                     improved = True
